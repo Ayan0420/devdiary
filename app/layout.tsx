@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
+import { Inter as FontSans } from "next/font/google"
+import { ThemeProvider } from "@/components/theme-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+import { cn } from "@/lib/utils"
+import Nav from "@/app/Nav";
+import Link from "next/link";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+ 
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +25,34 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Nav />
+            {children}
+          </ThemeProvider>
+          <Footer />
+        </body>
     </html>
   );
 }
+
+const Footer = () => (
+  <footer className="bg-primary-foreground dark:bg-primary-dark text-primary py-4">
+    <div className="container mx-auto text-center">
+      <div className="flex align-middle justify-between text-sm">
+        <p>&copy; 2024 DevDiary. All rights reserved.</p>
+        <Link href={"https://github.com/Ayan0420/devdiary"}>Get the Source</Link>
+        <p>Created by <a className="link" href="https://github.com/Ayan0420">Jerry Clark Ian Cabuntucan</a></p>
+
+      </div>
+    </div>
+  </footer>
+);
