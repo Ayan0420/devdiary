@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
+// import { Button } from "@/components/ui/button"
+// import { Label } from "@/components/ui/label"
+// import { Input } from "@/components/ui/input"
+// import Link from "next/link"
 import { SignInGoogle } from "./signInButtonGoogle";
 import { SignInGitHub } from "./signInButtonGithub";
 export default function Component() {
