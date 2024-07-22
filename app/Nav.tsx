@@ -56,7 +56,7 @@ function NavLinks() {
     <>
       <NavLink href="/" text="Home" />
       <NavLink href="/blogs" text="Blogs" />
-      <NavLink href="/login" text="Login" />
+      <NavLink href="/login" text="Sign In" />
       <Button asChild className="">
         <Link href="/blogs/new">
           <FaPenNib className="mr-2 h-4 w-4" />Write

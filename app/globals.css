@@ -89,3 +89,8 @@
   .blog-post pre {
     @apply my-4 bg-stone-900 text-primary-foreground dark:text-primary p-4 rounded-lg text-sm font-mono overflow-x-auto;
   }
+
+  .ce-block__content, 
+.ce-toolbar__content {
+ max-width: 1000px;  /* example value, adjust for your own use case */
+}
