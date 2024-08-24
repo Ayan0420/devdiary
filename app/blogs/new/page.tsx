@@ -4,11 +4,11 @@ import Editor from './Editor'
 
 const blogStructure = {
   title: "",
-  banner: "",
+  // banner: "",
   content: "",
-  tags: [],
+  // tags: [],
   description: "",
-  author: {}
+  // author: {}
 }
 
 export const EditorContext = createContext({});
@@ -17,6 +17,9 @@ const page = () => {
 
   const [blog, setBlog] = useState(blogStructure);
 
+  useEffect(() => {
+    console.log(blog)
+  }, [blog])
 
   return (
     <EditorContext.Provider value={{blog, setBlog}}>

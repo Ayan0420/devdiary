@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "react-hot-toast";
 
 import { cn } from "@/lib/utils"
 import Nav from "@/app/Nav";
@@ -34,7 +35,9 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
+          > 
+            {/* Add toaster */}
+            <Toaster position="bottom-right" />
             <Nav />
             {children}
           </ThemeProvider>

@@ -21,7 +21,7 @@ const PostCard = () => {
 
         <CardContent className="flex flex-col-reverse md:flex-row">
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo repellat tempora atque iure eos, sint excepturi explicabo vel ipsam non asperiores dolores nisi quidem sit voluptas, id necessitatibus aliquam esse?...</p>
-            <Image src="https://placehold.co/1080x720" alt="image" width={200} height={200} layout="responsive" className=" md:max-h-[130px] rounded-xl" />
+            <Image src="https://placehold.co/1080x720" alt="image" width={200} height={200} className=" md:max-h-[130px] rounded-xl" />
         </CardContent>
 
         <CardFooter className="flex flex-col-reverse md:flex-row items-start md:items-center md:justify-between gap-4">

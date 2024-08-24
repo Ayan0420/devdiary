@@ -14,9 +14,14 @@ const Editor = () => {
             holder: 'editorjs',
             data: blog.content,
             tools: tools,
-            placeholder: 'Start writing your awesome blog ...',
-
-
+            placeholder: 'Write your awesome blog ...',
+            async onChange(api, event) {
+                const content = await api.saver.save();
+                setBlog({
+                    ...blog,
+                    content
+                })
+            }
         })
     }, []);
 

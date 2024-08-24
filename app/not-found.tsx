@@ -11,7 +11,7 @@ export const  metadata = {
 
 const error = () => {
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col gap-4 items-center min-h-screen">
       <div className="w-[20rem] text-center flex flex-col gap-3">
         <div>
           <Image src="/not-found.png" alt="404" width={500} height={500} />

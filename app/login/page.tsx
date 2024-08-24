@@ -4,7 +4,16 @@
 // import Link from "next/link"
 import { SignInGoogle } from "./signInButtonGoogle";
 import { SignInGitHub } from "./signInButtonGithub";
-export default function Component() {
+import { auth } from "@/auth"
+import { redirect } from "next/navigation";
+ 
+
+export default async function page() {
+
+  const session = await auth();
+ 
+  if (session?.user) return redirect("/profile")
+
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-md space-y-4 text-center">

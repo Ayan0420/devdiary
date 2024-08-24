@@ -2,9 +2,11 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ModeToggle } from "@/components/ModeToggle";
+import { auth } from '@/auth'
 import { FaPenNib } from "react-icons/fa";
 
 export default function Nav() {
+
   return (
     <header className="bg-primary-foreground dark:bg-primary-foreground-dark flex h-20 w-full shrink-0 items-center px-4 md:px-6">
       <Sheet>
@@ -39,32 +41,87 @@ export default function Nav() {
   )
 }
 
-function NavLink({ href, text }: { href: string; text: string }) {
+
+const NavLinks = async () => {
+    
+    // to get the user session
+    const session = await auth()
+  
+    console.log('session', session)
+
+    return (
+      <>
+        <NavLink href="/" text="Home" />
+        <NavLink href="/blogs" text="Blogs" />
+        {!session?.user ? 
+          <NavLink href="/login" text="Sign In" />
+        :
+          <ProfileNav href="/profile" text="Profile" user={session.user}/>
+        }
+        <Button asChild className="">
+          <Link href="/blogs/new">
+            <FaPenNib className="mr-2 h-4 w-4" />Write
+          </Link>
+        </Button>
+      </>
+    )
+  }
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+import Image from "next/image";
+import { SignOut } from "@/components/SignoutButton";
+
+const ProfileNav = ({ href, text, user }: { href: string; text: string, user: any }) => {
+
   return (
-    <Link
-      href={href}
-      className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-stone-100 hover:text-stone-900 focus:bg-stone-100 focus:text-stone-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:bg-transparent dark:hover:bg-stone-800 dark:hover:text-stone-50 dark:focus:bg-transparent dark:focus:text-stone-50"
-      prefetch={false}
-    >
-      {text}
-    </Link>
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger className="bg-inherit">Profile</NavigationMenuTrigger>
+          <NavigationMenuContent className="bg-inherit rounded-sm text-center">
+            <ul className="grid gap-3 p-4 w-[15rem]">
+              <li className="flex justify-center">
+                <Image src={user.image} alt={user.name} width={50} height={50} className="rounded-full" />
+              </li>
+              <li className="">
+                <NavigationMenuLink asChild>
+                    <Link href={href} className="font-bold">
+                      {user.name}
+                    </Link>  
+                  </NavigationMenuLink>
+              </li>
+              <li className="mt-2">
+                <SignOut />
+              </li>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+
   )
 }
 
-function NavLinks() {
-  return (
-    <>
-      <NavLink href="/" text="Home" />
-      <NavLink href="/blogs" text="Blogs" />
-      <NavLink href="/login" text="Sign In" />
-      <Button asChild className="">
-        <Link href="/blogs/new">
-          <FaPenNib className="mr-2 h-4 w-4" />Write
-        </Link>
-      </Button>
-    </>
-  )
-}
+
+function NavLink({ href, text }: { href: string; text: string }) {
+    return (
+      <Link
+        href={href}
+        className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-stone-100 hover:text-stone-900 focus:bg-stone-100 focus:text-stone-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:bg-transparent dark:hover:bg-stone-800 dark:hover:text-stone-50 dark:focus:bg-transparent dark:focus:text-stone-50"
+        prefetch={false}
+      >
+        {text}
+      </Link>
+    )
+  }
 
 function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
