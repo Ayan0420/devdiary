@@ -8,6 +8,13 @@ export const getBlog = async (slug: string) => {
         where: {
             slug: slug,
         },
+        include: {
+            authorUser: {
+                select: {
+                    name: true
+                } 
+            }
+        }
     });
     
     

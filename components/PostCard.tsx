@@ -15,13 +15,24 @@ interface Post {
     title: string;
     description: string;
     slug: string;
+    tags: string[];
     content: JsonArray;
+    createdAt: Date;
+    authorUser: { name: string | null };
 }
 
-const PostCard: React.FC<Post> = ({ title, description, slug, content }) => {
+const PostCard: React.FC<Post> = ({
+    title,
+    description,
+    slug,
+    tags,
+    content,
+    authorUser,
+    createdAt
+}) => {
     console.log(content);
     return (
-        <Card className="">
+        <Card className="h-full">
             <CardHeader>
                 <CardTitle>
                     <Link
@@ -31,31 +42,34 @@ const PostCard: React.FC<Post> = ({ title, description, slug, content }) => {
                         {title}
                     </Link>
                 </CardTitle>
-                <CardDescription>
-                    by{" "}
-                    <Link className="underline" href={"#"}>
-                        John Doe
-                    </Link>
+                <CardDescription className="flex flex-col">
+                    
+                    <span>{new Date(createdAt).toLocaleDateString()}</span>
+                    <span>
+                        by{" "}<Link className="underline" href={"#"}>
+                            {authorUser.name}
+                        </Link>
+                    </span>
                 </CardDescription>
             </CardHeader>
 
             <CardContent className="flex flex-col-reverse md:flex-row">
                 <p className="w-full">{description}</p>
-                <Image
+                {/* <Image
                     src="https://placehold.co/1080x720"
                     alt="image"
                     width={200}
                     height={200}
                     className=" md:max-h-[130px] rounded-xl"
-                />
+                /> */}
             </CardContent>
 
             <CardFooter className="flex flex-col-reverse md:flex-row items-start md:items-center md:justify-between gap-4">
                 <div className="text-muted-foreground text-sm flex items-center gap-4">
-                    <div className="flex items-center gap-1">
+                    {/* <div className="flex items-center gap-1">
                         <FaEye className="" />
                         <span>200</span>
-                    </div>
+                    </div> */}
                     <div className="flex items-center gap-1">
                         <FaThumbsUp className="" />
                         <span>100</span>
@@ -67,10 +81,9 @@ const PostCard: React.FC<Post> = ({ title, description, slug, content }) => {
                 </div>
 
                 <div className="flex gap-2 flex-wrap justify-end">
-                    <Tag href="#" tag="Next.js" />
-                    <Tag href="#" tag="Docker" />
-                    <Tag href="#" tag="AWS EC2" />
-                    <Tag href="#" tag="Github Actions" />
+                    {tags.map((tag) => (
+                        <Tag key={tag} href="#" tag={tag} />
+                    ))}
                 </div>
             </CardFooter>
         </Card>
@@ -79,7 +92,7 @@ const PostCard: React.FC<Post> = ({ title, description, slug, content }) => {
 
 export default PostCard;
 
-function Tag({ href, tag }: { href: string; tag: string }) {
+export function Tag({ href, tag }: { href: string; tag: string }) {
     return (
         <Link
             href={href}

@@ -3,7 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import PostCard from "../PostCard";
+import PostCard from "../../components/PostCard";
+import { JsonArray } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -16,29 +17,58 @@ const page = async () => {
         where: {
             id: session?.user.id,
         },
+        include: {
+            BlogPost: {
+                orderBy: {
+                    createdAt: "desc",
+                },
+                include: {
+                    authorUser: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
+        },
     });
+
+    if (!user) return redirect("/");
+
+    console.log(user);
 
     return (
         <main className="container min-h-screen py-4">
-            <div className="col-span-6">
-                <h1 className="text-3xl font-bold text-center my-3">
-                    My Blogs
-                </h1>
-            </div>
-            <div className="grid grid-cols-12">
-                <div className="col-span-4">
-                    <div className="flex flex-col items-center gap-3">
-                        <Image
-                            src={user?.image as string}
-                            alt={user?.name as string}
-                            width={100}
-                            height={100}
-                            className="text-center rounded-full"
-                        />
-                        <h1 className="text-xl font-bold">{user?.name}</h1>
-                    </div>
+            <div className="">
+                <div className="flex flex-row gap-5 items-center">
+                    <Image
+                        src={user.image as string}
+                        alt={user.name as string}
+                        width={100}
+                        height={100}
+                        className="text-center rounded-full"
+                    />
+                    <h1 className="text-xl font-bold uppercase">
+                        {user?.name}
+                    </h1>
                 </div>
-                <div className="col-span-8 py-3 flex flex-col gap-3"></div>
+            </div>
+
+            <h1 className="text-3xl font-bold text-center my-3">My Blogs</h1>
+
+            <div className="py-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {user.BlogPost.map((blog) => (
+                    <PostCard
+                        key={blog.id}
+                        title={blog.title}
+                        description={blog.description}
+                        slug={blog.slug}
+                        tags={blog.tags}
+                        authorUser={blog.authorUser}
+                        content={blog.content as JsonArray}
+                        createdAt={blog.createdAt}
+                    />
+                ))}
             </div>
         </main>
     );

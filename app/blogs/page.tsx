@@ -1,4 +1,4 @@
-import PostCard from "@/app/PostCard";
+import PostCard from "@/components/PostCard";
 import React from "react";
 import { PrismaClient } from "@prisma/client";
 import { JsonArray } from "@prisma/client/runtime/library";
@@ -6,7 +6,18 @@ import { JsonArray } from "@prisma/client/runtime/library";
 const page = async () => {
     const prisma = new PrismaClient();
 
-    const blogs = await prisma.blogPost.findMany({});
+    const blogs = await prisma.blogPost.findMany({
+        orderBy: {
+            createdAt: "desc",
+        },
+        include: {
+            authorUser: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+    });
 
     return (
         <main className="container mx-auto min-h-screen mb-10">
@@ -28,7 +39,10 @@ const page = async () => {
                             title={blog.title}
                             description={blog.description}
                             slug={blog.slug}
+                            tags={blog.tags}
                             content={blog.content as JsonArray}
+                            authorUser={blog.authorUser}
+                            createdAt={blog.createdAt}
                         />
                     ))}
                 </div>

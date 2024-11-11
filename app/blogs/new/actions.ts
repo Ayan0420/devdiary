@@ -1,6 +1,6 @@
 'use server'
 
-import { Block } from "@blocknote/core"
+// import { Block } from "@blocknote/core"
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
@@ -17,16 +17,22 @@ const generateSlug = async (title: string) : Promise<string> => {
 interface Post {
     title: string
     description: string
-    contentBlocks: Block[]
+    contentBlocks: string
+    contentBlocksMd: string
+    author: string
+    tags: string[]
 }
 
-export async function createPost({title, description, contentBlocks}: Post) {
+export async function createPost({title, description, contentBlocks, contentBlocksMd, author, tags}: Post) {
     
     const post = {
         title,
         slug: await generateSlug(title),
         description,
-        content: contentBlocks
+        content: contentBlocks,
+        contentMd: contentBlocksMd,
+        author,
+        tags
     }
 
     await prisma.blogPost.create({

@@ -1,6 +1,8 @@
-import PostCard from "@/app/PostCard";
+import PostCard from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { PrismaClient } from "@prisma/client";
+import { JsonArray } from "@prisma/client/runtime/library";
+
 import Link from "next/link";
 
 export default function Home() {
@@ -33,7 +35,24 @@ const Hero = () => (
     </section>
 );
 
-const Featured = () => {
+const Featured =  async () => {
+
+    const prisma = new PrismaClient();
+
+    const blogs = await prisma.blogPost.findMany({
+        take: 6,
+        orderBy: {
+            createdAt: 'desc',
+        },
+        include: {
+            authorUser: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+    });
+
     return (
         <section className="py-10">
             <div className="container mx-auto">
@@ -42,8 +61,26 @@ const Featured = () => {
                 </h1>
                 <div
                     id="featured-posts"
-                    className="grid grid-cols-1 lg:grid-cols-2 gap-4"
-                ></div>
+                    className="grid grid-cols-1 md:grid-cols-12 gap-4"
+                >
+
+                   
+                {blogs.map((blog) => (
+                    <div className="col-span-6 flex flex-col gap-4">
+                        <PostCard
+                            key={blog.id}
+                            title={blog.title}
+                            description={blog.description}
+                            slug={blog.slug}
+                            tags={blog.tags}
+                            content={blog.content as JsonArray}
+                            authorUser={blog.authorUser}
+                            createdAt={blog.createdAt}
+                        />
+                    </div>
+                ))}
+                 
+                </div>
                 <div className="text-center mt-10">
                     <Button asChild variant="default" className="">
                         <Link href="/blogs">See More Blogs</Link>

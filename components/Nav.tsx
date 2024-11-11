@@ -21,9 +21,9 @@ export default function Nav() {
                     </div>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-[10rem]">
-                    <div className="grid gap-2 py-6">
-                        <NavLinks />
-                        <ModeToggle />
+                    <div className="h-full flex flex-col items-center justify-between">
+                        <NavLinks isExpanded={false}/>
+                        
                     </div>
                 </SheetContent>
             </Sheet>
@@ -32,12 +32,14 @@ export default function Nav() {
                 <span className="sr-only">DevDiary</span>
             </Link>
 
-            <NavLinks />
+
+            <NavLinks isExpanded={true} />
+
         </header>
     );
 }
 
-const NavLinks = async () => {
+const NavLinks = async ({isExpanded}: {isExpanded: boolean}) => {
     // to get the user session
     const session = await auth();
 
@@ -45,7 +47,7 @@ const NavLinks = async () => {
 
     return (
         <>
-            <nav className="hidden lg:flex gap-4 align-middle mx-auto">
+            <nav className={`${isExpanded ? "hidden lg:flex" : "flex flex-col gap-3" } placeholder:gap-4 align-middle mx-auto`}>
                 <NavLink href="/" text="Home" />
                 <NavLink href="/blogs" text="Blogs" />
 
@@ -56,7 +58,7 @@ const NavLinks = async () => {
                     </Link>
                 </Button>
             </nav>
-            <div className="hidden lg:flex gap-3">
+            <div className={`${isExpanded ? "hidden lg:flex" : "flex flex-col" } gap-3`}>
                 {!session?.user ? (
                     <NavLink href="/login" text="Sign In" />
                 ) : (

@@ -16,9 +16,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // BlogPost  BlogPost[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  BlogPost  BlogPost[]
 
   @@map("users")
 }
@@ -74,13 +74,14 @@ model BlogPost {
   title       String
   // banner      String
   content     Json
+  contentMd   String
   slug        String   @unique
   description String
-  // tags        String[]
-  // author      String    @db.ObjectId
+  tags        String[]
+  author      String   @db.ObjectId
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   // publishedAt DateTime?
 
-  // authorUser User @relation(fields: [author], references: [id], onDelete: Cascade)
+  authorUser User @relation(fields: [author], references: [id], onDelete: Cascade)
 }
